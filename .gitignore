@@ -1,0 +1,5 @@
+.sass-cache/
+firebase-debug.log
+
+# Should be compiling all of the css in the scss directory
+public/css/
