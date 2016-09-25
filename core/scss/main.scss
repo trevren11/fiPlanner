@@ -15,10 +15,6 @@ footer {
     padding: 25px;
 }
 
-.im {
-    width:100%
-}
-
 body {
     position: relative;
 }
@@ -32,7 +28,6 @@ body {
 
 #section2 {
     padding-top: 50px;
-    height: 500px;
     color: #fff;
     background-color: #673ab7;
 }
@@ -66,9 +61,10 @@ body {
 }
 
 .info{
-    font-size: 2em;
+    font-size: 1.5em;
 }
 .detail{
-    font-size: 5em;
-    color: black
+    font-size: 2.5em;
+    font-weight: bold;
+    color: mediumseagreen;
 }
