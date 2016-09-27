@@ -21,7 +21,6 @@ body {
 
 #section1 {
     padding-top: 50px;
-    height: 500px;
     color: #fff;
     background-color: #1E88E5;
 }
@@ -29,19 +28,17 @@ body {
 #section2 {
     padding-top: 50px;
     color: #fff;
-    background-color: #673ab7;
+    background-color: #26A69A;
 }
 
 #section3 {
     padding-top: 50px;
-    height: 500px;
     color: #fff;
-    background-color: #ff9800;
+    background-color: #475BCC;
 }
 
 #section41 {
     padding-top: 50px;
-    height: 500px;
     color: #fff;
     background-color: #00bcd4;
 }
@@ -67,4 +64,26 @@ body {
     font-size: 2.5em;
     font-weight: bold;
     color: mediumseagreen;
+}
+
+.massive-font-large{
+font-size: 30px;
+text-align: center;
+}
+  
+.progress-large{
+height:50px;
+text-align:center;
+}
+
+.progress-bar-large {
+  padding:.5em;
+}
+
+.medium{
+    width:80%;
+    margin: auto;
+}
+.medium p {
+    font-size: 1.5em;
 }
