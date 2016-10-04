@@ -72,11 +72,16 @@ function initApp() {
             document.getElementById('quickstart-sign-in').textContent = 'Sign out';
             // document.getElementById('quickstart-account-details').textContent = JSON.stringify(user, null, '  ');
             // [END_EXCLUDE]
+
+            writeUserData(uid, displayName, email, photoURL); // might need to change since this will happen every time
+            // console.log("Added user to database, email " );
+            // console.log(user);
+            loadData(); // this updates all of the info on the page
         } else {
             // User is signed out.
             // [START_EXCLUDE]
             // document.getElementById('quickstart-sign-in-status').textContent = 'Signed out';
-            document.getElementById('quickstart-sign-in').textContent = 'Sign in with Google';
+            document.getElementById('quickstart-sign-in').textContent = 'Sign in';
             // document.getElementById('quickstart-account-details').textContent = 'null';
             // document.getElementById('quickstart-oauthtoken').textContent = 'null';
             // [END_EXCLUDE]

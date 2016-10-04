@@ -9,9 +9,17 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <link rel=stylesheet type="text/css" href="css/main.css">
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+
 
 
   <script src="https://www.gstatic.com/firebasejs/3.4.0/firebase.js"></script>
+
+
+  <script src="js/login.js"></script>
+  <script src="js/main.js"></script>
   <script>
   // Initialize Firebase
   var config = {
@@ -22,10 +30,20 @@
     messagingSenderId: "161153000233"
   };
   firebase.initializeApp(config);
+
+  var database = firebase.database();
+  var storage = {
+    database: database,
+    simulation: 'Retirement',
+    user: null,
+    yearCount: 0,
+  };
+
+  
+  var calculationInfo = {};
+  // storage.database = database;
 </script>
 
-<script src="js/login.js"></script>
-<script src="js/main.js"></script>
 </head>
 
 <body data-spy="scroll" data-target=".navbar" data-offset="50">
@@ -51,57 +69,17 @@
                 <li><a href="#section42">Section 4-2</a></li>
               </ul>
             </li>
-            <li><a href="login.html">Login</a></li>
+            <li>
+              <a href="#" id="quickstart-sign-in"></a>
+            </li>
+            <!--<li><a href="login.html">Login</a></li>-->
           </ul>
-
         </div>
       </div>
     </div>
   </nav>
   <div id="section1" class="container-fluid text-center">
-    <h1>Section 1</h1>
-
-    <div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-header">
-
-        <!-- Header section containing title -->
-        <header class="mdl-layout__header mdl-color-text--white mdl-color--light-blue-700">
-            <div class="mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-grid">
-                <div class="mdl-layout__header-row mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--8-col-desktop">
-                    <a href="/">
-                        <h3>Firebase Authentication</h3>
-                    </a>
-                </div>
-            </div>
-        </header>
-
-        <main class="mdl-layout__content mdl-color--grey-100">
-            <div class="mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-grid">
-
-                <!-- Container for the demo -->
-                <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop">
-                    <div class="mdl-card__title mdl-color--light-blue-600 mdl-color-text--white">
-                        <h2 class="mdl-card__title-text">Google Authentication with Popup</h2>
-                    </div>
-                    <div class="mdl-card__supporting-text mdl-color-text--grey-600">
-                        <p>Sign in with your Google account below.</p>
-
-                        <!-- Button that handles sign-in/sign-out -->
-                        <button disabled class="mdl-button mdl-js-button mdl-button--raised" id="quickstart-sign-in">Sign in with Google</button>
-
-                        <!-- Container where we'll display the user details ->
-                        <div class="quickstart-user-details-container">
-                            Firebase sign-in status: <span id="quickstart-sign-in-status">Unknown</span>
-                            <div>Firebase auth <code>currentUser</code> object value:</div>
-                            <pre><code id="quickstart-account-details">null</code></pre>
-                            <div>Google OAuth Access Token:</div>
-                            <pre><code id="quickstart-oauthtoken">null</code></pre>
-                        </div>-->
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
-
+    <h1>Overview</h1>
     <!-- Modal -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
       <div class="modal-dialog" role="document">
@@ -120,8 +98,6 @@
         </div>
       </div>
     </div>
-
-
   </div>
   <div id="section2" class="container-fluid text-center">
     <h1>Dashboard </h1>
@@ -131,7 +107,7 @@
         <p>Retirement Progress
           <div class="progressBarModal">
             <div class="progress progress-large">
-              <div class="progress-bar progress-bar-large " aria-valuenow="40" style="width:40%">
+              <div id=percentGoal class="progress-bar progress-bar-large " aria-valuenow="40" style="width:40%">
               </div>
             </div>
           </div>
@@ -142,7 +118,7 @@
                   <div class=info>Projected Retirement Date</div>
                 </div>
                 <div class="panel-body">
-                  <div class="detail">January 21, 2025</div>
+                  <div class="detail"><span id=projectedRetirementDate>January 21, 2025</span></div>
                 </div>
               </div>
             </div>
@@ -152,7 +128,7 @@
                   <div class=info>Goal Retirement Date</div>
                 </div>
                 <div class="panel-body">
-                  <div class="detail">May 21, 2025</div>
+                  <div class="detail" id=display_goalDate>May 21, 2025</div>
                 </div>
               </div>
             </div>
@@ -164,7 +140,7 @@
                   <div class=info>Years Till Retirement</div>
                 </div>
                 <div class="panel-body">
-                  <div class="detail">9</div>
+                  <div class="detail"><span id=yearsTillRetirement>10</span></div>
                 </div>
               </div>
             </div>
@@ -174,7 +150,7 @@
                   <div class=info>Retirement Age</div>
                 </div>
                 <div class="panel-body">
-                  <div class="detail">34</div>
+                  <div class="detail"><span id=display_retireAge>34</span>&nbsp;</div>
                 </div>
               </div>
             </div>
@@ -184,7 +160,7 @@
     <br>
   </div>
   <div id="section3" class="container-fluid text-center">
-    <h1>Section 3</h1>
+    <h1>Data</h1>
     <div class=medium>
       <div class="col-sm-12 center">
         <div class="center-block">
@@ -194,7 +170,7 @@
                 <div class=info>Retirement Spending Allowance</div>
               </div>
               <div class="panel-body">
-                <div class="detail">$4,666/mo $56,000/yr</div>
+                <div class="detail">$<span id=monthlyRetirementSpending>4,666</span>/mo $<span id=yearlyRetirementSpending>55,000</span>/yr</div>
               </div>
             </div>
           </div>
@@ -204,11 +180,38 @@
                 <div class=info>Goal Balance</div>
               </div>
               <div class="panel-body">
-                <div class="detail">$800,000</div>
+                <div class="detail">$<span id=display_desiredNetworth>800,000</span></div>
               </div>
             </div>
           </div>
         </div>
+
+        <div class="center-block">
+          <div class="col-sm-6">
+            <div class="panel panel-primary">
+              <div class="panel-heading">
+                <div class=info>Income</div>
+              </div>
+              <div class="panel-body">
+                <div class="detail">$<span id=display_yearlyIncome>800,000</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="panel panel-primary">
+              <div class="panel-heading">
+                <div class=info>Expenses</div>
+              </div>
+              <div class="panel-body">
+                <div class="detail">$<span id=display_yearlyExpenses>800,000</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+
         <div class="center-block">
           <div class="col-sm-6">
             <div class="panel panel-primary">
@@ -216,35 +219,403 @@
                 <div class=info>Average Saving</div>
               </div>
               <div class="panel-body">
-                <div class="detail">$2,000/mo $24,000/yr</div>
+                <div class="detail">$<span id=monthlySavings>2,000</span>/mo $<span id=yearlySavings>$2,000</span>/yr</div>
               </div>
             </div>
           </div>
           <div class="col-sm-6">
             <div class="panel panel-primary">
               <div class="panel-heading">
-                <div class=info>Average Spending</div>
+                <div class=info>Current Net Worth</div>
               </div>
               <div class="panel-body">
-                <div class="detail">May 21, 2025</div>
+                <div class="detail">$<span id=display_currentNetWorth>80,001</span></div>
               </div>
             </div>
           </div>
         </div>
+
+
       </div>
       <br>
 
     </div>
   </div>
   <div id="section41" class="container-fluid text-center">
-    <h1>Section 4 Submenu 1</h1>
-
+    <div class=medium>
+      <h1>Retirement Breakdown</h1>
+      <table class="table table-responsiver">
+        <thead>
+          <tr>
+            <th>End of Year</th>
+            <th>Income</th>
+            <th>Net Worth Increase</th>
+            <th>Expenses</th>
+            <th>Investment Returns</th>
+            <th>Percent of Expenses Covered</th>
+            <th>Net Worth</th>
+          </tr>
+        </thead>
+        <tbody id=calculations>
+        </tbody>
+      </table>
+    </div>
   </div>
   <div id="section42" class="container-fluid text-center">
-    <h1>Section 4 Submenu 2</h1>
+    <h1>Edit Information</h1>
+    <button id=simulationButton type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#portfolio">
+  New/Load Simulation
+</button>
+
+
+
+
+    <!---------------------------------->
+    <!-- Button trigger modal -->
+    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModalHorizontal">
+    Add Information
+</button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModalHorizontal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+                       <span aria-hidden="true">&times;</span>
+                       <span class="sr-only">Close</span>
+                </button>
+            <h4 class="modal-title" id="myModalLabel">
+              Goals
+            </h4>
+          </div>
+
+          <!-- Modal Body -->
+          <div class="modal-body">
+
+            <form id=retireInfo class="form-horizontal" role="form">
+              <div class="form-group">
+                <label class="col-sm-4 control-label" for="retirementAge">Retirement Age</label>
+                <div class="col-sm-5">
+                  <input required type="number" class="form-control" id="retirementAge" placeholder="35" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-4 control-label" for="yearlyIncome">Yearly Income</label>
+                <div class="col-sm-5">
+                  <input required type="number" class="form-control" id="yearlyIncome" placeholder="25000" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-4 control-label" for="yearlyExpenses">Yearly Expenses</label>
+                <div class="col-sm-5">
+                  <input required type="number" class="form-control" id="yearlyExpenses" placeholder="30000" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-4 control-label" for="rateOfReturn">Annual Return</label>
+                <div class="col-sm-5">
+                  <input required type="number" class="form-control" id="rateOfReturn" placeholder="7" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-4 control-label" for="currentNetWorth">Current Net Worth</label>
+                <div class="col-sm-5">
+                  <input required type="number" class="form-control" id="currentNetWorth" placeholder="80000" />
+                </div>
+              </div>
+              <!--<div class="form-group">
+                <label class="col-sm-4 control-label" for="currentSavings">Current Savings</label>
+                <div class="col-sm-5">
+                  <input required type="number" class="form-control" id="currentSavings" placeholder="80000" />
+                </div>
+              </div>-->
+              <div class="form-group">
+                <label class="col-sm-4 control-label" for="desiredNetworth">Desired Net Worth</label>
+                <div class="col-sm-5">
+                  <input required type="number" class="form-control" id="desiredNetworth" placeholder="800000" />
+                </div>
+              </div>
+
+
+
+              <!--<div class="form-group">
+                <label class="col-sm-4 control-label" for="retirementGoalDate">Retirement Goal Date</label>
+                <div class="col-sm-5">
+                  <input required type="number" class="form-control" id="retirementGoalDate" placeholder="800000" />
+                </div>
+              </div>-->
+
+              <div class="form-group">
+                <label class="col-sm-4 control-label" for="currentSpending">Current Spending</label>
+                <div class="col-sm-5">
+                  <input required type="number" class="form-control" id="currentSpending" placeholder="800000" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-4 control-label" for="savingsRate">Saving Rate</label>
+                <div class="col-sm-5">
+                  <input required type="number" class="form-control" id="savingsRate" placeholder="800000" />
+                </div>
+              </div>
+
+              <!--<div class="form-group">
+                <label class="col-sm-4 control-label" for="desiredNetworth">Desired Net Worth</label>
+                <div class="col-sm-5">
+                  <input required type="number" class="form-control" id="desiredNetworth" placeholder="800000" />
+                </div>
+              </div>-->
+
+              <div class="form-group">
+                <label class="col-sm-4 control-label" for="datepicker">Date</label>
+                <div class="col-sm-5">
+                  <input required type="text" class="form-control" id="datepicker">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-4 control-label" for="datepicker">Date</label>
+                <div class="col-sm-5">
+                  <input required class="form-control datepicke" data-date-format="mm/dd/yyyy">
+                </div>
+              </div>
+
+
+
+              <button id=submitInfo type="submit" class="btn btn-default">Submit</button>
+
+            </form>
+          </div>
+          <!-- Modal Footer -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+            <!--<button type="submit" class="btn btn-primary">
+                    Save changes
+                </button>-->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!---------------------------------->
+
+
+
+
+    <!---------------------------------->
+    <!-- Button trigger modal -->
+    <!--<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#costs" id=editCosts>Edit Assumptions</button>-->
+
+    <!-- Modal -->
+    <div class="modal fade" id="costs" tabindex="-1" role="dialog" aria-labelledby="costs" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+                       <span aria-hidden="true">&times;</span>
+                       <span class="sr-only">Close</span>
+                </button>
+            <h4 class="modal-title" id="myModalLabel">
+              Costs
+            </h4>
+          </div>
+
+          <!-- Modal Body -->
+          <div class="modal-body">
+
+            <form id=yearCosts class="form-horizontal" role="form">
+              <div class='col-sm-3 black-text'>Year</div>
+              <div class='col-sm-3 black-text'>Income <small>After Tax</small></div>
+              <div class='col-sm-3 black-text'>Expenses</div>
+              <div class='col-sm-3 black-text'>% Return</div>
+              <div class="form-group">
+                <div>
+                </div>
+              </div>
+            </form>
+
+            <br/><small>Note: The last input will be used to calculate subsequent years (Example, if you only put one year it will use that for all of the calculations)</small>
+            <br/><small>Other Note: You have to refresh the page if you want to edit this again</small>
+            <br/><small>NOT CURRENTLY SUPPORTED!</small>
+
+
+          </div>
+          <!-- Modal Footer -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button id=resetCostsData type="button" class="btn btn-danger">Reset Data</button>
+            <button id=addYear class="btn btn-success">Add Input</button>
+
+            <!--<button type="submit" class="btn btn-primary">
+                    Save changes
+                </button>-->
+            <button id=submitExpenses type="submit" class="btn btn-primary" data-dismiss="modal">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!---------------------------------->
+
+
+
+
+
 
   </div>
+
+  <!--This is where the modal windows go-->
+  <div class="modal fade" id=portfolio>
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+          <h4 class="modal-title">Portfolios</h4>
+        </div>
+        <div class="modal-body">
+          <p>Select from simulations below or create a new one</p>
+          <div id=portfolioList></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button id=newSimulation type="button" class="btn btn-primary">Create New</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
+  <!--End simulation modal-->
 
 </body>
 
 </html>
+
+<script> 
+
+// For some reason this has to be here
+$( "#newSimulation" ).click(function() {
+  // Make a new simulation for the user
+  // firebase.auth().currentUser.displayName
+  var n = window.prompt("Name of simulation","Retirement");
+  makeUserPortfolio( n);
+  storage.simulation = n;
+});
+
+
+$( "#simulationButton" ).click(function() {
+  // alert( "Handler for .click() called." );
+  // load the list of simulations, if null display nothing or say need to create
+  $('#portfolioList').html('');
+  var str = 'users/'+ firebase.auth().currentUser.uid + "/profiles";
+  var commentsRef = firebase.database().ref(str);
+commentsRef.on('child_added', function(data) {
+  // Add to element
+
+  $('#portfolioList').append(' <button type="button" data-dismiss="modal" class="portfolio btn btn-default">' + data.key +  '</button>');
+});
+// console.log("End");
+});
+
+$(document).on('click', ".portfolio", function() {
+    var liId = this.innerHTML;
+    // alert(liId);
+    storage.profile = liId;
+});
+
+// Calendar popup
+$( "#datepicker" ).datepicker();
+// $( "#datepicker" ).datepicker({
+//       altField: "#goalDate",
+//       altFormat: "MM d, yy"
+//     });
+// $('#updateGoal').click(function () {
+//   var val = $('#alternate').val();
+//   console.log("VAL: " +val );
+//   updateGoal(val, storage);
+// });
+// $('#update').click(function() {
+  
+//   loadData();
+// })
+
+$('#retireInfo').submit(function(event) {
+  // alert( "Handler for .submit() called." );
+  // event.preventDefault();
+  // alert("Clicked")
+  var dateTest = new Date($('.datepicke').datepicker('getDate'));
+  console.log(dateTest.getTime());
+
+var dateTest1 = new Date($('#datepicker').datepicker('getDate'));
+  console.log(dateTest1.getTime());
+  alert(dateTest.getTime() + ' ' + dateTest1.getTime())
+
+  var data = [];
+  var x = document.getElementById("retireInfo");
+    var text = "";
+    var i;
+    console.log("Printing");
+    for (i = 0; i < x.length ;i++) {
+        if(x.elements[i].value.length > 0) {data[x.elements[i].id] = x.elements[i].value;
+        // console.log(x.elements[i].value);
+      }
+    }
+    alert("other thing");
+    // console.log(data);
+    updateProfileData(data);
+  // loadData();
+});
+
+$('#submitExpenses').submit(function() {
+  var data = [];
+  var x = document.getElementById("yearCosts");
+    var text = "";
+    var i;
+    var container =[];
+    var counter = 1;
+    for (i = 0; i < x.length ;i++) {
+          var tempObject = { year:counter, income: null, expenses: null, investmentReturn :null };
+          tempObject.income = x.elements[i].value;
+          tempObject.expenses = x.elements[i+1].value;
+          tempObject.investmentReturn = x.elements[i+2].value;
+          data[counter++] = tempObject;
+          i+=2;
+    }
+    console.log(data);
+    updateExpenseData(data);
+  // loadData();
+});
+
+
+
+$('#addYear').click(function() {
+  // appendCost(null);
+  $('#yearCosts').append(
+    '<label class="col-sm-3 control-label text-center" for="costs_year_'+ ++storage.yearCount +'">' + storage.yearCount + '</label>'
+    +  '<div class="col-sm-3" ><input required type="number" class="form-control" id="costs_income_' + storage.yearCount + '" placeholder="60000" /></div>'
+    +  '<div class="col-sm-3" ><input required type="number" class="form-control" id="costs_expenses_' + storage.yearCount + '" placeholder="30000" /></div>'
+    +  '<div class="col-sm-3" ><input required type="number" class="form-control" id="costs_percent_' + storage.yearCount + '" placeholder="7" /></div>')
+});
+
+$('#editCosts').click(function(){getCosts();});
+
+$('#resetCostsData').click(function(){resetCostData();});
+
+$('.datepicke').datepicker();
+// $('.datepicke').datepicker({
+//     startDate: '-3d'
+// });
+
+// $('.datepicke').datepicker('getDate');
+
+
+</script>

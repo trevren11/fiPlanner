@@ -87,3 +87,23 @@ text-align:center;
 .medium p {
     font-size: 1.5em;
 }
+
+.control-label, .modal-title{
+    color: black;
+}
+
+small {
+    color:black;
+}
+
+.black-text{
+    color: black;
+}
+
+tbody{
+    text-align: left;
+}
+
+tbody tr:hover td{
+    background-color: #009688;
+}
