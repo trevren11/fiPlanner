@@ -37,6 +37,9 @@ function calculate() {
   var income = parseInt(calculationInfo.yearlyIncome);
   var expenses = parseInt(calculationInfo.yearlyExpenses);
   var rateOfReturn = parseInt(calculationInfo.rateOfReturn);
+  var currentAge = parseInt(calculationInfo.currentAge);
+  var goalDate = new Date(calculationInfo.datepicker);
+  console.log(goalDate.toDateString());
   // <div class="progress-bar progress-bar-large " aria-valuenow="40" style="width:40%">
   // calculate percent of goal done
   var percentOfGoal = (currentNetWorth / desiredNetWorth) * 100;
@@ -48,6 +51,8 @@ function calculate() {
   $('#yearlySavings').html(saving.toFixed(0));
   $('#monthlyRetirementSpending').html((retirementAllowance / 12).toFixed(0));
   $('#yearlyRetirementSpending').html(retirementAllowance);
+
+  $('#display_goalDate').html(goalDate.toDateString());
 
   // console.log(desiredNetWorth);
   // console.log(currentNetWorth);
@@ -75,6 +80,7 @@ function calculate() {
       d.setDate(d.getDate() + year * 365);
       $('#projectedRetirementDate').html(d.toDateString());
       $('#yearsTillRetirement').html(year);
+      $('#display_retireAge').html(year+currentAge);
     }
 
     $('#calculations').append(

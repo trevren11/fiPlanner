@@ -295,12 +295,12 @@
           <div class="modal-body">
 
             <form id=retireInfo class="form-horizontal" role="form">
-              <div class="form-group">
+              <!--<div class="form-group">
                 <label class="col-sm-4 control-label" for="retirementAge">Retirement Age</label>
                 <div class="col-sm-5">
                   <input required type="number" class="form-control" id="retirementAge" placeholder="35" />
                 </div>
-              </div>
+              </div>-->
               <div class="form-group">
                 <label class="col-sm-4 control-label" for="yearlyIncome">Yearly Income</label>
                 <div class="col-sm-5">
@@ -341,7 +341,7 @@
               </div>
 
               <div class="form-group">
-                <label class="col-sm-4 control-label" for="retireAge">Current Age</label>
+                <label class="col-sm-4 control-label" for="currentAge">Current Age</label>
                 <div class="col-sm-5">
                   <input required type="number" class="form-control" id="currentAge" placeholder="24" />
                 </div>
@@ -356,19 +356,19 @@
                 </div>
               </div>-->
 
-              <div class="form-group">
+              <!--<div class="form-group">
                 <label class="col-sm-4 control-label" for="currentSpending">Current Spending</label>
                 <div class="col-sm-5">
                   <input required type="number" class="form-control" id="currentSpending" placeholder="800000" />
                 </div>
-              </div>
+              </div>-->
 
-              <div class="form-group">
+              <!--<div class="form-group">
                 <label class="col-sm-4 control-label" for="savingsRate">Saving Rate</label>
                 <div class="col-sm-5">
                   <input required type="number" class="form-control" id="savingsRate" placeholder="800000" />
                 </div>
-              </div>
+              </div>-->
 
               <!--<div class="form-group">
                 <label class="col-sm-4 control-label" for="desiredNetworth">Desired Net Worth</label>
@@ -378,18 +378,18 @@
               </div>-->
 
               <div class="form-group">
-                <label class="col-sm-4 control-label" for="datepicker">Date</label>
+                <label class="col-sm-4 control-label" for="datepicker">Goal Retirement Date</label>
                 <div class="col-sm-5">
                   <input required type="text" class="form-control" id="datepicker">
                 </div>
               </div>
-
+<!--
               <div class="form-group">
                 <label class="col-sm-4 control-label" for="datepicker">Date</label>
                 <div class="col-sm-5">
                   <input required class="form-control datepicke" data-date-format="mm/dd/yyyy">
                 </div>
-              </div>
+              </div>-->
 
 
 
@@ -564,7 +564,7 @@ $('#retireInfo').submit(function(event) {
 
 var dateTest1 = new Date($('#datepicker').datepicker('getDate'));
   console.log(dateTest1.getTime());
-  alert(dateTest.getTime() + ' ' + dateTest1.getTime())
+  // alert(dateTest.getTime() + ' ' + dateTest1.getTime())
 
   var data = [];
   var x = document.getElementById("retireInfo");
@@ -576,7 +576,6 @@ var dateTest1 = new Date($('#datepicker').datepicker('getDate'));
         // console.log(x.elements[i].value);
       }
     }
-    alert("other thing");
     // console.log(data);
     updateProfileData(data);
   // loadData();
