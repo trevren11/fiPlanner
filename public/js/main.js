@@ -54,18 +54,27 @@ function calculate() {
 
   $('#display_goalDate').html(goalDate.toDateString());
 
-  // console.log(desiredNetWorth);
-  // console.log(currentNetWorth);
-  // console.log(income);
-  // console.log(expenses);
-  // console.log(rateOfReturn);
   var roi = 0; // calculate till when roi is larger than expenses
   var year = 0;
   var yearNotFound = true;
   var yearsTillRetirement = 50;
+
+  // Things to draw on graph
+  // roi, expenses, income, 
+  // var calcArray = {roi: [], expenses: [], income: []}
+  var roiArray = [];
+  var expensesArray = [];
+  var incomeArray = [];
+  var netWorth = [];
+  var index = [];
+
+
+
+
+
   while (currentNetWorth < desiredNetWorth) {
     // get currentNetWorth and add currentNetWorth *= rateOfReturn/100
-    year++;
+    
     var difference = currentNetWorth;
     roi = currentNetWorth * (rateOfReturn / 100);
     currentNetWorth = income - expenses + currentNetWorth + currentNetWorth * (rateOfReturn / 100);
@@ -80,8 +89,14 @@ function calculate() {
       d.setDate(d.getDate() + year * 365);
       $('#projectedRetirementDate').html(d.toDateString());
       $('#yearsTillRetirement').html(year);
-      $('#display_retireAge').html(year+currentAge);
+      $('#display_retireAge').html(year + currentAge);
     }
+    roiArray[year] = roi.toFixed(0);
+    expensesArray[year] = expenses;
+    incomeArray[year] = income;
+    netWorth[year] = currentNetWorth.toFixed(0);
+    index[year] = 'Year '+year;
+
 
     $('#calculations').append(
       '<tr>'
@@ -94,8 +109,52 @@ function calculate() {
       + '<th>$' + currentNetWorth.toFixed(0) + '</th>'
       + '</tr>'
     );
+    year++;
   }
+  var data = { roi: roiArray, expenses: expensesArray, income: incomeArray, netWorth: netWorth, index:index };
+  drawGraph(data);
+}
 
+function drawGraph(data) {
+  console.log(data);
+  var ctx = document.getElementById("myChart");
+  Chart.defaults.global.defaultFontColor = '#ffffff';
+  // Chart.defaults.global.gridLines = '#ffffff';
+  var myChart = new Chart(ctx, {
+    type: 'line',
+    // options: {
+    //   fontColor: 'rgba(255, 150, 114, 0.5)',
+    // },
+    data: {
+      labels: data.index,
+      datasets: [
+        {
+          type: 'line',
+          label: 'Expenses',
+          data: data.expenses,
+          backgroundColor: 'rgba(255, 150, 114, 0.5)',
+        },
+        {
+          type: 'line',
+          label: 'ROI',
+          data: data.roi,
+          backgroundColor: 'rgba(63, 81, 181, 0.5)',
+        },
+        {
+          type: 'line',
+          label: 'Net Worth',
+          data: data.netWorth,
+          backgroundColor: 'rgba(38, 166, 154, 0.5)',
+        },
+        {
+          type: 'line',
+          label: 'Income',
+          data: data.income,
+          backgroundColor: 'rgba(38, 166, 154, 0.5)',
+        }
+      ]
+    }
+  });
 }
 
 function loadData() {
